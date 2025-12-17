@@ -56,21 +56,32 @@
               <table class="table table-registro mb-0 align-middle">
                 <thead class="table-light">
                   <tr>
-                    <th style="width: 20%">Tipo</th>
-                    <th style="width: 20%">Material</th>
+                    <th style="width: 25%">Tipo</th>
+                    <th style="width: 10%">Quantidade</th>
+                    <th style="width: 15%">Material</th>
                     <th style="width: 15%">Cor</th>
-                    <th style="width: 25%">Estado</th>
+                    <th style="width: 15%">Estado</th>
                     <th style="width: 20%">Serviço</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>
+                      <select name="tipo" class="form-select border-0">
+                        <option value="Camisa">Camisa</option>
+                        <option value="Calça">Calça</option>
+                        <option value="Toalha">Toalha</option>
+                        <option value="Bermuda">Bermuda</option>
+                        <option value="Lençol">Lençol</option>
+                      </select>
+                    </td>
+                    <td>
                       <input
-                        type="text"
-                        name="tipo"
-                        class="form-control-table"
-                        placeholder="Roupa"
+                        type="number"
+                        name="quantidade"
+                        class="form-control-table text-center"
+                        value="1"
+                        min="1"
                         required
                       />
                     </td>
@@ -88,7 +99,7 @@
                         type="text"
                         name="cor"
                         class="form-control-table"
-                        placeholder="Branca"
+                        placeholder="Cor"
                         required
                       />
                     </td>
@@ -102,10 +113,7 @@
                       />
                     </td>
                     <td>
-                      <select
-                        name="servico"
-                        class="form-select border-0 bg-transparent"
-                      >
+                      <select name="servico" class="form-select border-0">
                         <option value="Lavar">Lavar</option>
                         <option value="Secar">Secar</option>
                         <option value="Passar">Passar</option>

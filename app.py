@@ -28,23 +28,31 @@ def index_registro():
 def registrar_pedido():
     nome = request.form.get('cliente')
     tel = request.form.get('telefone')
+    
+    # Captura os dados da peça e a quantidade
     tipo = request.form.get('tipo')
     material = request.form.get('material')
     cor = request.form.get('cor')
     estado = request.form.get('estado')
     servico = request.form.get('servico')
+    quantidade = int(request.form.get('quantidade', 1))
     
     conn = db.get_db()
     cursor = conn.cursor()
+    
     cursor.execute("INSERT OR IGNORE INTO clientes (nome, cpf, telefone) VALUES (?, ?, ?)", (nome, tel, tel))
     cliente_id = cursor.execute("SELECT id FROM clientes WHERE telefone = ?", (tel,)).fetchone()['id']
     
-    peca = Peca(tipo, material, cor, estado, servico)
-    pedido = Pedido(0, Cliente(cliente_id, nome, tel, ""))
-    pedido.adicionar_peca(peca)
+    peca_obj = Peca(tipo, material, cor, estado, servico)
+    pedido_obj = Pedido(0, Cliente(cliente_id, nome, tel, ""))
     
-    cursor.execute("INSERT INTO pedidos (cliente_id, valor_bruto, desconto, valor_liquido, status, status_pagamento) VALUES (?,?,?,?,?,?)",
-                   (cliente_id, pedido.valor_bruto, pedido.desconto, pedido.valor_liquido, "Recebido", "Aberto"))
+    for _ in range(quantidade):
+        pedido_obj.adicionar_peca(peca_obj)
+    cursor.execute("""
+        INSERT INTO pedidos (cliente_id, valor_bruto, desconto, valor_liquido, status, status_pagamento) 
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (cliente_id, pedido_obj.valor_bruto, pedido_obj.desconto, pedido_obj.valor_liquido, "Recebido", "Aberto"))
+    
     conn.commit()
     conn.close()
     return redirect(url_for('gestao'))
