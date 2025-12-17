@@ -24,16 +24,16 @@ def login_action():
 def index_registro():
     return render_template('index.html')
 
-@app.route('/registrar_pedido', methods=['POST'])
-def registrar_pedido():
-    nome = request.form.get('cliente')
-    tel = request.form.get('telefone')
-    tipo = request.form.get('tipo')
-    cor = request.form.get('cor')
-    estado = request.form.get('estado')
-    servico = request.form.get('servico')
-    quantidade = int(request.form.get('quantidade', 1))
-    
+@app.route('/registrar_pedido_multiplo', methods=['POST'])
+def registrar_pedido_multiplo():
+    dados = request.get_json()
+    nome = dados.get('cliente')
+    tel = dados.get('telefone')
+    itens = dados.get('itens', [])
+
+    if not itens:
+        return "Nenhum item adicionado", 400
+
     conn = db.get_db()
     cursor = conn.cursor()
     
@@ -42,11 +42,13 @@ def registrar_pedido():
     cliente = cursor.execute("SELECT id FROM clientes WHERE telefone = ?", (tel,)).fetchone()
     cliente_id = cliente['id']
 
-    peca_obj = Peca(tipo, cor, estado, servico)
-    pedido_obj = Pedido(0, Cliente(cliente_id, nome, tel, ""))
+    cliente_obj = Cliente(cliente_id, nome, tel, "")
+    pedido_obj = Pedido(0, cliente_obj)
     
-    for _ in range(quantidade):
-        pedido_obj.adicionar_peca(peca_obj)
+    for item in itens:
+        peca_info = Peca(item['tipo'], item['cor'], "Recebido", item['servico'])
+        for _ in range(int(item['qtd'])):
+            pedido_obj.adicionar_peca(peca_info)
     
     cursor.execute("""INSERT INTO pedidos (cliente_id, valor_bruto, desconto, valor_liquido, status, status_pagamento) 
                       VALUES (?, ?, ?, ?, ?, ?)""", 
@@ -54,7 +56,7 @@ def registrar_pedido():
     
     conn.commit()
     conn.close()
-    return redirect(url_for('gestao'))
+    return {"status": "sucesso"}, 200
 
 @app.route('/gestao')
 def gestao():

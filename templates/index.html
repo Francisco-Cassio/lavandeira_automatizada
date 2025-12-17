@@ -26,171 +26,216 @@
     </nav>
 
     <div class="container">
-      <div class="card card-registro shadow mx-auto">
-        <div class="card-body p-5">
+      <div class="card card-registro shadow mx-auto" style="max-width: 900px">
+        <div class="card-body p-4">
           <h2 class="text-center mb-4 fw-bold">
             Lavanderia <span class="text-success">Automatizada</span>
           </h2>
-          <form action="/registrar_pedido" method="POST">
-            <div class="row mb-4">
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Cliente:</label>
+
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Cliente:</label>
+              <input
+                type="text"
+                id="clienteNome"
+                class="form-control bg-light"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Telefone:</label>
+              <input
+                type="text"
+                id="clienteTel"
+                class="form-control bg-light"
+                placeholder="(99) 99999-9999"
+                required
+              />
+            </div>
+          </div>
+
+          <h6 class="fw-bold mb-3">Adicionar Peças ao Pedido:</h6>
+          <div class="p-3 bg-white border rounded-3 mb-4 shadow-sm">
+            <div class="row g-2 align-items-end">
+              <div class="col-md-3">
+                <label class="small fw-bold">Tipo</label>
+                <select id="tipoInput" class="form-select">
+                  <option value="Camisa">Camisa</option>
+                  <option value="Calça">Calça</option>
+                  <option value="Toalha">Toalha</option>
+                  <option value="Roupa Delicada">Delicada</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <label class="small fw-bold">Quantidade</label>
                 <input
-                  type="text"
-                  name="cliente"
-                  class="form-control bg-light"
-                  required
+                  type="number"
+                  id="qtdInput"
+                  class="form-control"
+                  value="1"
+                  min="1"
                 />
               </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Telefone:</label>
+              <div class="col-md-2">
+                <label class="small fw-bold">Cor</label>
                 <input
                   type="text"
-                  name="telefone"
-                  class="form-control bg-light"
-                  placeholder="(86) 99999-9999"
-                  required
+                  id="corInput"
+                  class="form-control"
+                  placeholder="Azul"
                 />
               </div>
-            </div>
-
-            <h6 class="fw-bold mb-3">Detalhes da Peça:</h6>
-            <div class="border rounded-3 overflow-hidden">
-              <table class="table table-registro mb-0 align-middle text-center">
-                <thead class="table-light">
-                  <tr>
-                    <th style="width: 25%">Tipo</th>
-                    <th style="width: 10%">Quantidade</th>
-                    <th style="width: 20%">Cor</th>
-                    <th style="width: 20%">Estado</th>
-                    <th style="width: 25%">Serviço</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <select
-                        name="tipo"
-                        id="tipoPeca"
-                        class="form-select border-0 bg-transparent"
-                        onchange="atualizarPreco()"
-                      >
-                        <option value="Camisa">Camisa</option>
-                        <option value="Calça">Calça</option>
-                        <option value="Toalha">Toalha</option>
-                        <option value="Roupa Delicada">Roupa Delicada</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        name="quantidade"
-                        id="qtdPeca"
-                        class="form-control-table text-center"
-                        value="1"
-                        min="1"
-                        oninput="atualizarPreco()"
-                        required
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        name="cor"
-                        class="form-control-table"
-                        placeholder="Azul"
-                        required
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        name="estado"
-                        class="form-control-table"
-                        placeholder="Sem manchas"
-                        required
-                      />
-                    </td>
-                    <td>
-                      <select
-                        name="servico"
-                        class="form-select border-0 bg-transparent"
-                      >
-                        <option value="Lavar">Lavar</option>
-                        <option value="Secar">Secar</option>
-                        <option value="Passar">Passar</option>
-                        <option value="Pacote Completo">Pacote Completo</option>
-                      </select>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div
-              class="mt-4 p-3 bg-light rounded-3 d-flex justify-content-between align-items-center border"
-            >
-              <div>
-                <span class="text-muted small d-block">Valor Unitário:</span>
-                <span class="fw-bold text-dark"
-                  >R$ <span id="exibirPreco">15.00</span></span
-                >
+              <div class="col-md-3">
+                <label class="small fw-bold">Serviço</label>
+                <select id="servicoInput" class="form-select">
+                  <option value="Lavar">Lavar</option>
+                  <option value="Secar">Secar</option>
+                  <option value="Passar">Passar</option>
+                  <option value="Pacote Completo">Completo</option>
+                </select>
               </div>
-              <div class="text-end">
-                <span class="text-muted small d-block">Total Estimado:</span>
-                <h4 class="fw-bold text-success mb-0" id="totalEstimado">
-                  R$ 15.00
-                </h4>
-                <small
-                  class="text-danger fw-bold"
-                  id="avisoDesconto"
-                  style="display: none"
+              <div class="col-md-2">
+                <button
+                  type="button"
+                  onclick="adicionarPeca()"
+                  class="btn btn-primary w-100 fw-bold"
                 >
-                  10% de desconto aplicado! (Volume >= 5)
-                </small>
+                  Adicionar
+                </button>
               </div>
             </div>
+          </div>
 
-            <button
-              type="submit"
-              class="btn btn-success w-100 py-3 fw-bold mt-4 shadow-sm"
-            >
-              Confirmar Registro do Pedido
-            </button>
-          </form>
+          <div class="table-responsive border rounded-3 mb-4">
+            <table class="table table-hover mb-0 text-center align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>Tipo</th>
+                  <th>Qtd</th>
+                  <th>Cor</th>
+                  <th>Serviço</th>
+                  <th>Subtotal</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="listaItens"></tbody>
+            </table>
+          </div>
+
+          <div
+            class="p-3 bg-light rounded-3 d-flex justify-content-between align-items-center border"
+          >
+            <div class="text-end w-100">
+              <h4 class="fw-bold text-success mb-0">
+                Total: R$ <span id="totalPedido">0.00</span>
+              </h4>
+              <small
+                class="text-danger fw-bold"
+                id="avisoDesconto"
+                style="display: none"
+                >10% de desconto aplicado por volume!</small
+              >
+            </div>
+          </div>
+
+          <button
+            onclick="finalizarPedido()"
+            class="btn btn-success w-100 py-3 fw-bold mt-4 shadow-sm"
+          >
+            Finalizar Pedido Completo
+          </button>
         </div>
       </div>
     </div>
 
     <script>
-      function atualizarPreco() {
-        const precosBase = {
-          Camisa: 15.0,
-          Calça: 20.0,
-          Toalha: 10.0,
-          "Roupa Delicada": 25.0,
-        };
+      let carrinho = [];
+      const precosBase = {
+        Camisa: 15,
+        Calça: 20,
+        Toalha: 10,
+        "Roupa Delicada": 25,
+      };
 
-        const tipo = document.getElementById("tipoPeca").value;
-        const qtd = parseInt(document.getElementById("qtdPeca").value) || 1;
+      function adicionarPeca() {
+        const tipo = document.getElementById("tipoInput").value;
+        const qtd = parseInt(document.getElementById("qtdInput").value);
+        const cor = document.getElementById("corInput").value || "N/A";
+        const servico = document.getElementById("servicoInput").value;
 
-        let precoUn = precosBase[tipo] || 10.0;
-        let total = precoUn * qtd;
+        if (qtd < 1) return alert("Quantidade mínima é 1");
 
-        if (qtd >= 5) {
-          total = total * 0.9;
+        const item = { tipo, qtd, cor, servico, precoUn: precosBase[tipo] };
+        carrinho.push(item);
+        atualizarTabela();
+
+        document.getElementById("corInput").value = "";
+        document.getElementById("qtdInput").value = "1";
+      }
+
+      function removerItem(index) {
+        carrinho.splice(index, 1);
+        atualizarTabela();
+      }
+
+      function atualizarTabela() {
+        const corpo = document.getElementById("listaItens");
+        corpo.innerHTML = "";
+        let bruto = 0;
+        let totalQtd = 0;
+
+        carrinho.forEach((item, index) => {
+          const subtotal = item.precoUn * item.qtd;
+          bruto += subtotal;
+          totalQtd += item.qtd;
+
+          corpo.innerHTML += `
+            <tr>
+              <td>${item.tipo}</td>
+              <td>${item.qtd}</td>
+              <td>${item.cor}</td>
+              <td>${item.servico}</td>
+              <td>R$ ${subtotal.toFixed(2)}</td>
+              <td><button class="btn btn-sm btn-outline-danger" onclick="removerItem(${index})">Remover</button></td>
+            </tr>`;
+        });
+
+        let valorFinal = bruto;
+        if (totalQtd >= 5) {
+          valorFinal = bruto * 0.9;
           document.getElementById("avisoDesconto").style.display = "block";
         } else {
           document.getElementById("avisoDesconto").style.display = "none";
         }
 
-        document.getElementById("exibirPreco").innerText = precoUn.toFixed(2);
-        document.getElementById("totalEstimado").innerText =
-          "R$ " + total.toFixed(2);
+        document.getElementById("totalPedido").innerText =
+          valorFinal.toFixed(2);
       }
 
-      // Executa no carregamento inicial
-      window.onload = atualizarPreco;
+      async function finalizarPedido() {
+        const cliente = document.getElementById("clienteNome").value;
+        const telefone = document.getElementById("clienteTel").value;
+
+        if (!cliente || !telefone || carrinho.length === 0) {
+          return alert(
+            "Preencha os dados do cliente e adicione ao menos uma peça."
+          );
+        }
+
+        const payload = { cliente, telefone, itens: carrinho };
+
+        const response = await fetch("/registrar_pedido_multiplo", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+          window.location.href = "/gestao";
+        } else {
+          alert("Erro ao registrar pedido.");
+        }
+      }
     </script>
   </body>
 </html>
