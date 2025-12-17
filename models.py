@@ -16,19 +16,15 @@ class Peca:
         'Roupa Delicada': 25.0
     }
 
-    def __init__(self, tipo, material, cor, estado, servico):
+    def __init__(self, tipo, cor, estado, servico):
         self.tipo = tipo
-        self.material = material
         self.cor = cor
         self.estado = estado
         self.servico = servico
         self.preco = self._calcular_preco_peca()
 
     def _calcular_preco_peca(self):
-        base = self.TABELA_PRECOS.get(self.tipo, 10.0)
-        if self.material.lower() == 'seda':
-            base *= 1.2
-        return base
+        return self.TABELA_PRECOS.get(self.tipo, 10.0)
 
 class Pedido:
     def __init__(self, id_pedido, cliente):
