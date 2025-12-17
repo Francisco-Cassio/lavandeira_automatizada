@@ -6,17 +6,11 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+    <link rel="stylesheet" href="../static/css/style.css" />
     <title>Gestão - IFPI</title>
   </head>
   <body class="bg-light">
-    <nav
-      class="navbar navbar-dark mb-4 shadow"
-      style="background-color: #2c3e50"
-    >
+    <nav class="navbar navbar-dark mb-4 shadow navbar-custom">
       <div class="container">
         <span class="navbar-brand fw-bold">🧺 Lavanderia IFPI</span>
         <div class="navbar-nav d-flex flex-row gap-3">
@@ -31,7 +25,7 @@
     </nav>
 
     <div class="container">
-      <h3 class="mb-4 fw-bold" style="color: #2c3e50">Painel de Controle</h3>
+      <h3 class="mb-4 fw-bold text-primary-dark">Painel de Controle</h3>
       <div class="card shadow border-0 rounded-4 overflow-hidden text-center">
         <table class="table table-hover mb-0">
           <thead class="table-dark">
@@ -64,7 +58,7 @@
                 R$ {{ "%.2f"|format(p.valor_liquido) }}
               </td>
               <td>
-                <div class="btn-group">
+                <div>
                   <a
                     href="/atualizar/{{ p.id }}"
                     class="btn btn-sm btn-outline-dark"
