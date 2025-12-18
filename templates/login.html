@@ -15,6 +15,22 @@
         <h1 class="fw-extrabold text-success m-0">LAVANDERIA</h1>
         <small class="text-muted fw-bold">PAINEL ADMINISTRATIVO</small>
       </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert alert-{{ category }} alert-dismissible fade show p-2 small"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close p-2"
+          data-bs-dismiss="alert"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+
       <form action="/login" method="POST">
         <div class="mb-3">
           <label class="form-label small fw-bold">Usuário</label>
@@ -38,6 +54,61 @@
           Entrar
         </button>
       </form>
+
+      <div class="text-center mt-3">
+        <p class="small text-muted">
+          Não tem conta?
+          <a
+            href="#"
+            class="text-success fw-bold text-decoration-none"
+            data-bs-toggle="modal"
+            data-bs-target="#modalCadastro"
+            >Crie uma aqui</a
+          >
+        </p>
+      </div>
     </div>
+
+    <div class="modal fade" id="modalCadastro" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+          <div class="modal-header border-0 pb-0">
+            <h5 class="modal-title fw-bold">Criar Nova Conta</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form action="/cadastrar_usuario" method="POST">
+              <div class="mb-3">
+                <label class="form-label small fw-bold">Novo Usuário</label>
+                <input
+                  type="text"
+                  name="usuario"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label small fw-bold">Senha</label>
+                <input
+                  type="password"
+                  name="senha"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn-success w-100 fw-bold">
+                Cadastrar
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

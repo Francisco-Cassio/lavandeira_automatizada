@@ -15,9 +15,32 @@ def login_page():
 def login_action():
     username = request.form.get('usuario')
     senha = request.form.get('senha')
-    if username == "admin" and senha == "123":
+    
+    conn = db.get_db()
+    user = conn.execute("SELECT * FROM usuarios WHERE username = ? AND senha = ?", (username, senha)).fetchone()
+    conn.close()
+    
+    if user:
         return redirect(url_for('index_registro'))
-    flash("Usuário ou senha inválidos")
+    
+    flash("Usuário ou senha incorretos!", "danger")
+    return redirect(url_for('login_page'))
+
+@app.route('/cadastrar_usuario', methods=['POST'])
+def cadastrar_usuario():
+    username = request.form.get('usuario')
+    senha = request.form.get('senha')
+    
+    conn = db.get_db()
+    try:
+        conn.execute("INSERT INTO usuarios (username, senha) VALUES (?, ?)", (username, senha))
+        conn.commit()
+        flash("Conta criada com sucesso! Faça login.", "success")
+    except:
+        flash("Erro: Este usuário já existe.", "warning")
+    finally:
+        conn.close()
+        
     return redirect(url_for('login_page'))
 
 @app.route('/registro')

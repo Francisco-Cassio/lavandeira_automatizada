@@ -10,14 +10,12 @@ def get_db():
 def init_db():
     conn = get_db()
     cur = conn.cursor()
-
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS usuarios (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            senha TEXT
-        )
-    """)
+    
+    conn.execute('''CREATE TABLE IF NOT EXISTS usuarios (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL,
+        senha TEXT NOT NULL
+    )''')
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS clientes (
