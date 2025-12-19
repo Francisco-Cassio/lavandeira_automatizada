@@ -53,29 +53,25 @@ def registrar_pedido_multiplo():
     nome = dados.get('cliente')
     tel = dados.get('telefone')
     itens = dados.get('itens', [])
-
-    if not itens:
-        return "Nenhum item adicionado", 400
+    forma_pag = dados.get('forma_pagamento')
 
     conn = db.get_db()
     cursor = conn.cursor()
     
-    cursor.execute("INSERT OR IGNORE INTO clientes (nome, cpf, telefone, endereco) VALUES (?, ?, ?, ?)", 
-                  (nome, tel, tel, "Teresina-PI"))
-    cliente = cursor.execute("SELECT id FROM clientes WHERE telefone = ?", (tel,)).fetchone()
-    cliente_id = cliente['id']
+    cursor.execute("INSERT OR IGNORE INTO clientes (nome, telefone) VALUES (?, ?)", (nome, tel))
+    cliente_id = cursor.execute("SELECT id FROM clientes WHERE telefone = ?", (tel,)).fetchone()['id']
 
-    cliente_obj = Cliente(cliente_id, nome, tel, "")
-    pedido_obj = Pedido(0, cliente_obj)
-    
+    pedido_obj = Pedido(0, Cliente(cliente_id, nome, tel, ""))
     for item in itens:
         peca_info = Peca(item['tipo'], item['cor'], "Recebido", item['servico'])
         for _ in range(int(item['qtd'])):
             pedido_obj.adicionar_peca(peca_info)
     
-    cursor.execute("""INSERT INTO pedidos (cliente_id, valor_bruto, desconto, valor_liquido, status, status_pagamento) 
-                      VALUES (?, ?, ?, ?, ?, ?)""", 
-                   (cliente_id, pedido_obj.valor_bruto, pedido_obj.desconto, pedido_obj.valor_liquido, "Recebido", "Aberto"))
+    cursor.execute("""
+        INSERT INTO pedidos (cliente_id, valor_bruto, desconto, valor_liquido, status, status_pagamento, forma_pagamento) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    """, (cliente_id, pedido_obj.valor_bruto, pedido_obj.desconto, pedido_obj.valor_liquido, 
+          "Recebido", "Aberto", forma_pag))
     
     conn.commit()
     conn.close()

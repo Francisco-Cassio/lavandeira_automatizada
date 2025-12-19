@@ -39,6 +39,7 @@
                 type="text"
                 id="clienteNome"
                 class="form-control bg-light"
+                placeholder="Nome Completo"
                 required
               />
             </div>
@@ -126,14 +127,27 @@
             class="p-3 bg-light rounded-3 d-flex justify-content-between align-items-center border"
           >
             <div class="text-end w-100">
-              <h4 class="fw-bold text-success mb-0">
-                Total: R$ <span id="totalPedido">0.00</span>
-              </h4>
+              <div class="col-md-6">
+                <label class="form-label fw-bold small"
+                  >Forma de Pagamento:</label
+                >
+                <select id="formaPagamento" class="form-select bg-light">
+                  <option value="Dinheiro">Dinheiro</option>
+                  <option value="Pix">Pix</option>
+                  <option value="Cartão de Crédito">Cartão de Crédito</option>
+                  <option value="Cartão de Débito">Cartão de Débito</option>
+                </select>
+              </div>
+              <div class="col-md-6 text-end">
+                <h4 class="fw-bold text-success mb-0">
+                  Total: R$ <span id="totalPedido">0.00</span>
+                </h4>
+              </div>
               <small
                 class="text-danger fw-bold"
                 id="avisoDesconto"
                 style="display: none"
-                >10% de desconto aplicado por volume!</small
+                >10% de desconto aplicado</small
               >
             </div>
           </div>
@@ -190,14 +204,14 @@
           totalQtd += item.qtd;
 
           corpo.innerHTML += `
-            <tr>
-              <td>${item.tipo}</td>
-              <td>${item.qtd}</td>
-              <td>${item.cor}</td>
-              <td>${item.servico}</td>
-              <td>R$ ${subtotal.toFixed(2)}</td>
-              <td><button class="btn btn-sm btn-outline-danger" onclick="removerItem(${index})">Remover</button></td>
-            </tr>`;
+                <tr>
+                  <td>${item.tipo}</td>
+                  <td>${item.qtd}</td>
+                  <td>${item.cor}</td>
+                  <td>${item.servico}</td>
+                  <td>R$ ${subtotal.toFixed(2)}</td>
+                  <td><button class="btn btn-sm btn-outline-danger" onclick="removerItem(${index})">Remover</button></td>
+                </tr>`;
         });
 
         let valorFinal = bruto;
@@ -215,6 +229,7 @@
       async function finalizarPedido() {
         const cliente = document.getElementById("clienteNome").value;
         const telefone = document.getElementById("clienteTel").value;
+        const formaPag = document.getElementById("formaPagamento").value;
 
         if (!cliente || !telefone || carrinho.length === 0) {
           return alert(
@@ -222,7 +237,12 @@
           );
         }
 
-        const payload = { cliente, telefone, itens: carrinho };
+        const payload = {
+          cliente,
+          telefone,
+          itens: carrinho,
+          forma_pagamento: formaPag,
+        };
 
         const response = await fetch("/registrar_pedido_multiplo", {
           method: "POST",

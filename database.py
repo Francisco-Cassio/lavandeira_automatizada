@@ -17,15 +17,13 @@ def init_db():
         senha TEXT NOT NULL
     )''')
 
-    cur.execute("""
+    conn.execute('''
         CREATE TABLE IF NOT EXISTS clientes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
-            cpf TEXT UNIQUE NOT NULL,
-            telefone TEXT UNIQUE NOT NULL,
-            endereco TEXT
+            telefone TEXT UNIQUE NOT NULL
         )
-    """)
+    ''')
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS pedidos (
